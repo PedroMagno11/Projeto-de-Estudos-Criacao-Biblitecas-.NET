@@ -1,5 +1,6 @@
 ﻿using bytebank.Modelos.Conta;
 using bytebank_ATENDIMENTO.bytebank.Exceptions;
+using Newtonsoft.Json;
 
 namespace bytebank_ATENDIMENTO.bytebank.Atendimento
 {
@@ -19,18 +20,19 @@ namespace bytebank_ATENDIMENTO.bytebank.Atendimento
             try
             {
                 char opcao = '0';
-                while (opcao != '6')
+                while (opcao != '7')
                 {
                     Console.Clear();
-                    Console.WriteLine("===============================");
-                    Console.WriteLine("===       Atendimento       ===");
-                    Console.WriteLine("===1 - Cadastrar Conta      ===");
-                    Console.WriteLine("===2 - Listar Contas        ===");
-                    Console.WriteLine("===3 - Remover Conta        ===");
-                    Console.WriteLine("===4 - Ordenar Contas       ===");
-                    Console.WriteLine("===5 - Pesquisar Conta      ===");
-                    Console.WriteLine("===6 - Sair do Sistema      ===");
-                    Console.WriteLine("===============================");
+                    Console.WriteLine("================================");
+                    Console.WriteLine("===        Atendimento       ===");
+                    Console.WriteLine("=== 1 - Cadastrar Conta      ===");
+                    Console.WriteLine("=== 2 - Listar Contas        ===");
+                    Console.WriteLine("=== 3 - Remover Conta        ===");
+                    Console.WriteLine("=== 4 - Ordenar Contas       ===");
+                    Console.WriteLine("=== 5 - Pesquisar Conta      ===");
+                    Console.WriteLine("=== 6 - Exportar Contas      ===");
+                    Console.WriteLine("=== 7 - Sair do Sistema      ===");
+                    Console.WriteLine("================================");
                     Console.WriteLine("\n\n");
                     Console.Write("Digite a opção desejada: ");
                     try
@@ -60,6 +62,9 @@ namespace bytebank_ATENDIMENTO.bytebank.Atendimento
                             PesquisarContas();
                             break;
                         case '6':
+                            ExportarContas();
+                            break;
+                        case '7':
                             EncerrarAplicacao();
                             break;
                         default:
@@ -71,6 +76,40 @@ namespace bytebank_ATENDIMENTO.bytebank.Atendimento
             catch (ByteBankException excecao)
             {
                 Console.WriteLine($"{excecao.Message}");
+            }
+        }
+
+        private void ExportarContas()
+        {
+            Console.Clear();
+            Console.WriteLine("=======================");
+            Console.WriteLine("=== EXPORTAR CONTAS ===");
+            Console.WriteLine("=======================");
+            Console.WriteLine("\n");
+
+            if(_listaDeContas.Count <= 0) 
+            {
+                Console.WriteLine("... Não existe dados para exportação...");
+                Console.ReadKey();
+            }
+            else
+            {
+                string json = JsonConvert.SerializeObject(_listaDeContas, Formatting.Indented);
+                try
+                {
+                    FileStream fs = new FileStream("contas.json", FileMode.Create);
+                    using(StreamWriter streamwriter = new StreamWriter(fs))
+                    {
+                        streamwriter.WriteLine(json);
+                    }
+                    Console.WriteLine("Arquivo salvo no contas.json");
+                    Console.ReadLine();
+                }
+                catch (Exception ex)
+                {
+                    throw new ByteBankException(ex.Message);
+                    Console.ReadKey();
+                }
             }
         }
 
