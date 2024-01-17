@@ -1,4 +1,4 @@
-#Projeto de Estudos: Criação de Bibliotecas .NET
+# Projeto de Estudos: Criação de Bibliotecas .NET
 
 Este é um projeto de estudos dedicado à criação de bibliotecas e DLLs em C#. Este projeto tem como objetivo explorar os conceitos fundamentais e as práticas recomendadas ao desenvolver componentes reutilizáveis em C# que podem ser distribuídos como bibliotecas ou DLLs.
 
